@@ -2,6 +2,7 @@ import { connectDB } from "./db/db";
 import { app } from "./lib/app";
 import { env } from "./lib/env";
 import { prisma } from "./lib/prisma";
+import { errorHanlder } from "./middlewares/errorHandler";
 import v1Router from "./routes/v1";
 import "dotenv/config.js";
 
@@ -26,6 +27,8 @@ app.use("/api/health", async (_, res) => {
 });
 
 app.use("/api/v1", v1Router);
+
+app.use(errorHanlder);
 
 app.listen(PORT, async () => {
   await connectDB();
