@@ -1,3 +1,4 @@
+import express from "express";
 import { connectDB } from "./db/db";
 import { app } from "./lib/app";
 import { env } from "./lib/env";
@@ -8,7 +9,9 @@ import "dotenv/config.js";
 
 const PORT = env.PORT;
 
-app.use("/api/health", async (_, res) => {
+app.use(express.json());
+
+app.use("/health", async (_, res) => {
   try {
     await prisma.$connect();
     return res.json({

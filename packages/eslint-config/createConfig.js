@@ -16,7 +16,7 @@ function createConfig(options, ...userConfigs) {
     {
       rules: {
         "ts/consistent-type-definitions": ["error", "interface"],
-        "no-console": "warn",
+        "no-console": ["warn"],
         "antfu/no-top-level-await": ["off"],
         "node/prefer-global/process": ["error"],
         "node/no-process-env": ["error"],
