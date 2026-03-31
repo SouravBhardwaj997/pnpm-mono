@@ -28,7 +28,7 @@ enum PaymentMethods {
 }
 model Expense{
   id Int @id @default(autoincrement())
-  amount String
+  amount Int
   note String
   paymentMethod PaymentMethods  
   date DateTime @default(now())
