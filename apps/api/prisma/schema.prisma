@@ -20,6 +20,7 @@ model User{
   name String
   createdAt DateTime @default(now())
   expenses Expense[]
+  income Income[]
 }
 
 enum PaymentMethods {
@@ -43,4 +44,28 @@ model ExpenseCategory{
   title String
   description String
   expenses Expense[]
+}
+
+enum IncomeMethods {
+  CASH
+  CARD
+}
+
+model Income {
+  id Int @id @default(autoincrement())
+  amount Int
+  note String
+  incomeMethod IncomeMethods
+  date DateTime @default(now())
+  incomeCategoryId Int 
+  incomeCategory IncomeCategory @relation(fields: [incomeCategoryId],references: [id])
+  userId Int
+  user User @relation(fields: [userId],references: [id])
+}
+
+model IncomeCategory{
+  id Int @id @default(autoincrement())
+  title String 
+  description String
+  income Income[]
 }
