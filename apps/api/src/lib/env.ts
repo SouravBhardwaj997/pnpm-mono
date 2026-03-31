@@ -5,6 +5,7 @@ import "dotenv/config";
 const envSchema = z.object({
   DATABASE_URL: z.url(),
   PORT: z.coerce.number().default(8001),
+  JWT_SECRET: z.string(),
 });
 
 // eslint-disable-next-line node/no-process-env

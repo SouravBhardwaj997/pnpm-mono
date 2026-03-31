@@ -1,6 +1,6 @@
 import type { loginSchemaType, signUpSchemaType } from "@/schemas/auth.schema";
 import { prisma } from "@/lib/prisma";
-import { comparePassword, hashPassword } from "@/utils";
+import { comparePassword, hashPassword, signJWT } from "@/utils";
 import { ApiError } from "@/utils/apiError";
 import { ApiResponse } from "@/utils/apiResponse";
 import { asyncHandler } from "@/utils/asyncHandler";
@@ -27,7 +27,9 @@ export const signUp = asyncHandler(async (req, res) => {
     omit: { password: true },
   });
 
-  return ApiResponse.created(res, "User Created Successfully", user);
+  const token = await signJWT(user);
+
+  return ApiResponse.created(res, "User Created Successfully", { user, token });
 });
 
 export const login = asyncHandler(async (req, res) => {
@@ -43,10 +45,13 @@ export const login = asyncHandler(async (req, res) => {
     return ApiError.badRequest("Invalid Credentials", {});
   }
 
-  const isPasswordMatched = await comparePassword(password, existingUser.password);
+  const { password: hashedPassword, ...user } = existingUser;
+
+  const isPasswordMatched = await comparePassword(password, hashedPassword);
   if (!isPasswordMatched) {
     return ApiError.badRequest("Invalid Credentials", {});
   }
+  const token = await signJWT(user);
 
-  return ApiResponse.success(res, 200, "User Logged In", { ...existingUser, password: null });
+  return ApiResponse.success(res, 200, "User Logged In", { user, token });
 });
