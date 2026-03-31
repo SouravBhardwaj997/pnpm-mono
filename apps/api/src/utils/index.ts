@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { env } from "@/lib/env";
+import { ApiError } from "./apiError";
 
 export async function hashPassword(password: string) {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -17,7 +18,21 @@ export async function signJWT(user: { email: string; name: string; username: str
   return token;
 }
 
-export async function verifyJWT(token: string) {
-  const decode = jwt.verify(token, env.JWT_SECRET);
-  return decode;
+export interface User {
+  id: number;
+  email: string;
+  username: string;
+  name: string;
+  createdAt: string;
+  iat: number;
+}
+
+export function verifyJWT(token: string) {
+  try {
+    const decode = jwt.verify(token, env.JWT_SECRET) as User;
+    return decode;
+  }
+  catch {
+    throw ApiError.unAuthorized("Invalid or Expired Token");
+  }
 }
