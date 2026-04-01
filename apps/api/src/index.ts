@@ -1,3 +1,4 @@
+import * as trpcExpress from "@trpc/server/adapters/express";
 import express from "express";
 import { connectDB } from "./db/db";
 import { app } from "./lib/app";
@@ -5,6 +6,8 @@ import { env } from "./lib/env";
 import { prisma } from "./lib/prisma";
 import { errorHanlder } from "./middlewares/errorHandler";
 import v1Router from "./routes/v1";
+import { appRouter } from "./trpc/appRouter";
+import { createContext } from "./trpc/context";
 import "dotenv/config.js";
 
 const PORT = env.PORT;
@@ -29,8 +32,15 @@ app.use("/health", async (_, res) => {
   }
 });
 
-app.use("/api/v1", v1Router);
+app.use(
+  "/trpc",
+  trpcExpress.createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  }),
+);
 
+app.use("/api/v1", v1Router);
 app.use(errorHanlder);
 
 app.listen(PORT, async () => {

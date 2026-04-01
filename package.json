@@ -9,7 +9,8 @@
     "build": "pnpm -r --if-present run build",
     "lint": "pnpm -r --if-present run lint",
     "lint:fix": "pnpm -r --if-present run lint:fix",
-    "build:api":"cd apps/api && pnpm run build"
+    "build:api":"pnpm --filter @pnpm-mono/api run build",
+    "dev:api":"pnpm --filter @pnpm-mono/api run dev"
   },
   "keywords": [],
   "author": "",
