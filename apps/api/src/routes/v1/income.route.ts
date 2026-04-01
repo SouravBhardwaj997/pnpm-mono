@@ -1,10 +1,12 @@
 import Router from "express";
-import { addIncome } from "@/controllers/v1/income.controller";
+import { addIncome, getIncome } from "@/controllers/v1/income.controller";
 import { validate } from "@/middlewares/validate";
-import { addIncomeSchema } from "@/schemas/income.schema";
+import { addIncomeSchema, getIncomeSchema } from "@/schemas/income.schema";
 
 const router = Router();
 
-router.get("/", validate(addIncomeSchema), addIncome);
+router.post("/", validate(addIncomeSchema), addIncome);
+
+router.get("/", validate(getIncomeSchema), getIncome);
 
 export default router;

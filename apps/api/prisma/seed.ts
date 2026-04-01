@@ -109,6 +109,29 @@ export const expenses: { amount: number; note: string; paymentMethod: "CARD" | "
   { amount: 2800, note: "Dinner at cafe", paymentMethod: "CARD", categoryId: 1, userId: 1 },
   { amount: 1000, note: "Pharmacy purchase", paymentMethod: "CARD", categoryId: 5, userId: 1 },
 ];
+
+export const incomes: { amount: number; note: string; incomeMethod: "CARD" | "CASH"; incomeCategoryId: number; userId: number }[] = [
+  { amount: 50000, note: "Monthly salary", incomeMethod: "CARD", incomeCategoryId: 1, userId: 1 },
+  { amount: 8000, note: "Freelance project", incomeMethod: "CASH", incomeCategoryId: 2, userId: 1 },
+  { amount: 12000, note: "Business earnings", incomeMethod: "CASH", incomeCategoryId: 3, userId: 1 },
+  { amount: 15000, note: "Stock market profit", incomeMethod: "CARD", incomeCategoryId: 4, userId: 1 },
+  { amount: 7000, note: "Rental income", incomeMethod: "CARD", incomeCategoryId: 5, userId: 1 },
+  { amount: 2000, note: "Bank interest", incomeMethod: "CARD", incomeCategoryId: 6, userId: 1 },
+  { amount: 3500, note: "Dividend payout", incomeMethod: "CARD", incomeCategoryId: 7, userId: 1 },
+  { amount: 6000, note: "Side hustle", incomeMethod: "CASH", incomeCategoryId: 8, userId: 1 },
+  { amount: 2500, note: "Gift received", incomeMethod: "CASH", incomeCategoryId: 9, userId: 1 },
+  { amount: 1800, note: "Misc income", incomeMethod: "CASH", incomeCategoryId: 10, userId: 1 },
+  { amount: 52000, note: "Salary bonus", incomeMethod: "CARD", incomeCategoryId: 1, userId: 1 },
+  { amount: 9000, note: "Freelance UI work", incomeMethod: "CASH", incomeCategoryId: 2, userId: 1 },
+  { amount: 14000, note: "Small business sales", incomeMethod: "CASH", incomeCategoryId: 3, userId: 1 },
+  { amount: 11000, note: "Mutual fund returns", incomeMethod: "CARD", incomeCategoryId: 4, userId: 1 },
+  { amount: 8000, note: "Second property rent", incomeMethod: "CARD", incomeCategoryId: 5, userId: 1 },
+  { amount: 2200, note: "FD interest", incomeMethod: "CARD", incomeCategoryId: 6, userId: 1 },
+  { amount: 4000, note: "Quarterly dividends", incomeMethod: "CARD", incomeCategoryId: 7, userId: 1 },
+  { amount: 7500, note: "Part-time gig", incomeMethod: "CASH", incomeCategoryId: 8, userId: 1 },
+  { amount: 3000, note: "Festival gift", incomeMethod: "CASH", incomeCategoryId: 9, userId: 1 },
+  { amount: 2100, note: "Other earnings", incomeMethod: "CASH", incomeCategoryId: 10, userId: 1 },
+];
 connectDB().then(() => {
   expenseCategories.map(async category => (
     await prisma.expenseCategory.createMany({ data: { title: category.title, description: category.description }, skipDuplicates: true })
@@ -117,8 +140,12 @@ connectDB().then(() => {
     await prisma.incomeCategory.createMany({ data: { title: category.title, description: category.description }, skipDuplicates: true })
   ));
 
-  expenses.map(async expense => (
-    await prisma.expense.createMany({ data: expense })
+  // expenses.map(async expense => (
+  //   await prisma.expense.createMany({ data: expense })
+  // ));
+
+  incomes.map(async income => (
+    await prisma.income.createMany({ data: income })
   ));
 }).catch((err) => {
   console.error("Unable to connect DB", err);
