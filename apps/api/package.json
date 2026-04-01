@@ -10,6 +10,7 @@
     "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "build": "tsc",
     "db:push": "pnpm dlx prisma db push && pnpm dlx prisma generate",
     "db:seed": "pnpm dlx prisma db seed"
   },

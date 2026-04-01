@@ -8,7 +8,8 @@
     "dev": "pnpm -r --parallel --if-present run dev",
     "build": "pnpm -r --if-present run build",
     "lint": "pnpm -r --if-present run lint",
-    "lint:fix": "pnpm -r --if-present run lint:fix"
+    "lint:fix": "pnpm -r --if-present run lint:fix",
+    "build:api":"cd apps/api && pnpm run build"
   },
   "keywords": [],
   "author": "",
