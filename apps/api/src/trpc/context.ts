@@ -1,9 +1,12 @@
-import type * as trpcExpress from "@trpc/server/adapters/express";
+import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
+import { getUserFromToken } from "@/utils";
 
-export function createContext({
+export async function createContext({
   req,
   res,
-}: trpcExpress.CreateExpressContextOptions) {
-  return {};
-} // no context
+}: CreateExpressContextOptions) {
+  const token = req.headers.authorization?.split(" ")[1];
+  const user = token ? getUserFromToken(token) : null;
+  return { req, res, user };
+}
 export type Context = Awaited<ReturnType<typeof createContext>>;

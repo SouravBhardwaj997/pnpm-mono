@@ -36,3 +36,13 @@ export function verifyJWT(token: string) {
     throw ApiError.unAuthorized("Invalid or Expired Token");
   }
 }
+
+export function getUserFromToken(token: string) {
+  try {
+    const decode = jwt.verify(token, env.JWT_SECRET) as User;
+    return decode;
+  }
+  catch {
+    return null;
+  }
+}
