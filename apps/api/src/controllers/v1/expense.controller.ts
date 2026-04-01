@@ -11,23 +11,26 @@ export const addExpense = asyncHandler(async (req, res) => {
 
 export const getExpenses = asyncHandler(async (req, res) => {
   const { limit = 10, cursor } = req.query as GetExpensesSchemaType["query"];
-  const expenses = await prisma.expense.findMany({ where: { userId: req.user?.id }, take: Number(limit), ...(cursor && { cursor: { id: Number(cursor) }, skip: 1 }), orderBy: {
+  const expenses = await prisma.expense.findMany({ where: { userId: req.user?.id }, take: Number(limit) + 1, ...(cursor && { cursor: { id: Number(cursor) }, skip: 1 }), orderBy: {
     id: "asc",
   } });
-  return ApiResponse.success(res, 200, "Fetched Users Expenses", { expenses, nextCursor: expenses.at(-1)?.id, hasMore: expenses.length });
+  const hasMore = expenses.length > Number(limit);
+  const data = hasMore ? expenses.slice(0, expenses.length - 1) : expenses;
+  const nextCursor = hasMore ? data.at(-1)?.id : null;
+  return ApiResponse.success(res, 200, "Fetched Users Expenses", { expenses: data, nextCursor, hasMore });
 });
 
 export const deleteExpense = asyncHandler(async (req, res) => {
-  const { expenseId } = req.params as DeleteExpenseSchemaType["params"];
-  await prisma.expense.delete({ where: { id: Number(expenseId) } });
+  const { id } = req.params as DeleteExpenseSchemaType["params"];
+  await prisma.expense.delete({ where: { id: Number(id) } });
   return ApiResponse.noContent(res);
 });
 
 export const updateExpense = asyncHandler(async (req, res) => {
-  const { expenseId } = req.params as UpdateExpenseSchemaType["params"];
+  const { id } = req.params as UpdateExpenseSchemaType["params"];
   const { amount, categoryId, note, paymentMethod } = req.body as UpdateExpenseSchemaType["body"];
 
-  const expense = await prisma.expense.update({ where: { id: Number(expenseId) }, data: {
+  const expense = await prisma.expense.update({ where: { id: Number(id) }, data: {
     amount,
     note,
     paymentMethod,

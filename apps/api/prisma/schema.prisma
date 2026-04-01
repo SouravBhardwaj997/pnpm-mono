@@ -41,7 +41,7 @@ model Expense{
 
 model ExpenseCategory{
   id Int @id @default(autoincrement())
-  title String
+  title String @unique
   description String
   expenses Expense[]
 }
@@ -65,7 +65,7 @@ model Income {
 
 model IncomeCategory{
   id Int @id @default(autoincrement())
-  title String 
+  title String @unique
   description String
   income Income[]
 }

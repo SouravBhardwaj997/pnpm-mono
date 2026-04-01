@@ -10,7 +10,8 @@
     "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "db:push": "pnpm dlx prisma db push && pnpm dlx prisma generate"
+    "db:push": "pnpm dlx prisma db push && pnpm dlx prisma generate",
+    "db:seed": "pnpm dlx prisma db seed"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",

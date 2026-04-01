@@ -3,10 +3,10 @@ import { z } from "zod";
 export const getExpensesSchema = z.object({
   params: z.object({}),
   query: z.object({
-    cursor: z.string(),
+    cursor: z.string().optional(),
     limit: z.string(),
   }),
-  body: z.object({}),
+  body: z.undefined(),
 });
 
 export const addExpenseSchema = z.strictObject({
@@ -22,15 +22,15 @@ export const addExpenseSchema = z.strictObject({
 
 export const deleteExpenseSchema = z.strictObject({
   params: z.object({
-    expenseId: z.string().min(1, "Expense Id is required"),
+    id: z.string().min(1, "Expense Id is required"),
   }),
   query: z.object({}),
-  body: z.object({}),
+  body: z.undefined(),
 });
 
 export const updateExpenseSchema = z.strictObject({
   params: z.object({
-    expenseId: z.string().min(1, "Expense Id is required"),
+    id: z.string().min(1, "Expense Id is required"),
   }),
   query: z.object({}),
   body: z.object({ amount: z.int().min(1, "Amount is required"), note: z.string().min(1, "Note is required"), paymentMethod: z.enum(["CARD", "CASH"]).default("CARD"), categoryId: z.int().min(1, "Category Id is required") }),

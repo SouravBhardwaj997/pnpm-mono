@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { addExpense, deleteExpense, getExpenses, updateExpense } from "@/controllers/v1/expense.controller";
 import { validate } from "@/middlewares/validate";
-import { addExpenseSchema, deleteExpenseSchema, updateExpenseSchema } from "@/schemas/expense.schema";
+import { addExpenseSchema, deleteExpenseSchema, getExpensesSchema, updateExpenseSchema } from "@/schemas/expense.schema";
 
 const router = Router();
 
-router.get("/", getExpenses);
+router.get("/", validate(getExpensesSchema), getExpenses);
 
 router.post("/", validate(addExpenseSchema), addExpense);
 

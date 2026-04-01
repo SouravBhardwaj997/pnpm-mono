@@ -13,9 +13,9 @@ export function validate(schema: z.ZodObject) {
           errors[key] = [];
         errors[key].push(issue.message);
       }
-
       return ApiError.badRequest("Validation failed", errors);
     }
+    req.body = result.data.body;
     next();
   };
 }
