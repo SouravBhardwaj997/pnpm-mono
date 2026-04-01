@@ -54,7 +54,7 @@ enum IncomeMethods {
 model Income {
   id Int @id @default(autoincrement())
   amount Int
-  note String
+  note String?
   incomeMethod IncomeMethods
   date DateTime @default(now())
   incomeCategoryId Int 
