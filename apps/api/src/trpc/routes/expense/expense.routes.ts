@@ -1,13 +1,13 @@
 import { prisma } from "@/lib/prisma";
-import { publicProcedure, router } from "@/trpc/trpc";
+import { protectedProcedure, router } from "@/trpc/trpc";
 import { expenseListInputSchema } from "./schema";
 
 export const expenseRouter = router({
-  expenseList: publicProcedure
+  expenseList: protectedProcedure
     .input(expenseListInputSchema)
-    .query(async ({ input }) => {
-      const { limit, cursor, userId } = input;
-      const expenses = await prisma.expense.findMany({ where: { userId }, take: Number(limit) + 1, ...(cursor && { cursor: { id: Number(cursor) }, skip: 1 }), orderBy: {
+    .query(async ({ input, ctx }) => {
+      const { limit, cursor } = input;
+      const expenses = await prisma.expense.findMany({ where: { userId: ctx.user.id }, take: Number(limit) + 1, ...(cursor && { cursor: { id: Number(cursor) }, skip: 1 }), orderBy: {
         id: "asc",
       } });
       const hasMore = expenses.length > Number(limit);
