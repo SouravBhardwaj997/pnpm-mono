@@ -1,6 +1,7 @@
+import { TRPCError } from "@trpc/server";
 import { prisma } from "@/lib/prisma";
 import { protectedProcedure, router } from "@/trpc/trpc";
-import { addUserExpenses, getUserExpensesInputSchema } from "./schema";
+import { addUserExpensesSchema, deleteUserExpenseSchema, getUserExpensesInputSchema, updateUserExpensesSchema } from "./schema";
 
 export const expenseRouter = router({
   getUserExpenses: protectedProcedure
@@ -15,11 +16,43 @@ export const expenseRouter = router({
       const nextCursor = hasMore ? data.at(-1)?.id : null;
       return { expenses: data, nextCursor, hasMore };
     }),
-  addUserExpenses: protectedProcedure.input(addUserExpenses).query(async ({ input, ctx }) => {
+  addUserExpenses: protectedProcedure.input(addUserExpensesSchema).mutation(async ({ input, ctx }) => {
     const { amount, categoryId, note, paymentMethod } = input;
     const expense = await prisma.expense.create({ data: { amount, note, paymentMethod, categoryId, userId: ctx.user.id } });
     return {
       expense,
     };
+  }),
+  updateUserExpense: protectedProcedure.input(updateUserExpensesSchema).mutation(async ({ input, ctx }) => {
+    const { amount, categoryId, expenseId, note, paymentMethod } = input;
+
+    const expense = await prisma.expense.updateMany({ where: { id: expenseId, userId: ctx.user.id }, data: {
+      amount,
+      note,
+      paymentMethod,
+      categoryId,
+    } });
+    if (expense.count === 0) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Expense not found or does not belong to you" });
+    }
+    return {
+      expense,
+    };
+  }),
+  deleteUserExpense: protectedProcedure.input(deleteUserExpenseSchema).mutation(async ({ input, ctx }) => {
+    const { expenseId } = input;
+
+    const expense = await prisma.expense.deleteMany({
+      where: {
+        id: expenseId,
+        userId: ctx.user.id,
+      },
+    });
+
+    if (expense.count === 0) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Expense not found or does not belong to you" });
+    }
+
+    return { success: true };
   }),
 });

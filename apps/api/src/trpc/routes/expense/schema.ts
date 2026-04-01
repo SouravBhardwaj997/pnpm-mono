@@ -5,9 +5,21 @@ export const getUserExpensesInputSchema = z.object({
   limit: z.string(),
 });
 
-export const addUserExpenses = z.object({
+export const addUserExpensesSchema = z.object({
   amount: z.int().min(1, "Amount is required"),
   note: z.string().min(1, "Note is required"),
   paymentMethod: z.enum(["CARD", "CASH"]).default("CARD"),
   categoryId: z.int().min(1, "Category ID is required"),
+});
+
+export const updateUserExpensesSchema = z.object({
+  expenseId: z.int().min(1, "Expense Id is required"),
+  amount: z.int().min(1, "Amount is required"),
+  note: z.string().min(1, "Note is required"),
+  paymentMethod: z.enum(["CARD", "CASH"]).default("CARD"),
+  categoryId: z.int().min(1, "Category ID is required"),
+});
+
+export const deleteUserExpenseSchema = z.object({
+  expenseId: z.int().min(1, "Expense Id is required"),
 });
