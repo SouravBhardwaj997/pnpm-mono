@@ -1,4 +1,5 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
+import cors from "cors";
 import express from "express";
 import { connectDB } from "./db/db";
 import { app } from "./lib/app";
@@ -13,6 +14,11 @@ import "dotenv/config.js";
 const PORT = env.PORT;
 
 app.use(express.json());
+
+app.use(cors({
+  origin: ["http://localhost:5173"],
+  credentials: true,
+}));
 
 app.use("/health", async (_, res) => {
   try {

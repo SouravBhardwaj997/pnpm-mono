@@ -1,11 +1,14 @@
-import { Button } from "@pnpm-mono/ui";
-
-function App() {
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './utils/trpc';
+import Test from './components/Test';
+ 
+ function App() {
   return (
-    <>
-      <Button />
-    </>
+    <QueryClientProvider client={queryClient}>
+     
+      <Test/>
+    </QueryClientProvider>
   );
 }
 
-export default App;
+export default App

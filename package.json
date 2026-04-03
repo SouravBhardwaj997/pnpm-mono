@@ -10,7 +10,10 @@
     "lint": "pnpm -r --if-present run lint",
     "lint:fix": "pnpm -r --if-present run lint:fix",
     "build:api":"pnpm --filter @pnpm-mono/api run build",
-    "dev:api":"pnpm --filter @pnpm-mono/api run dev"
+    "dev:api":"pnpm --filter @pnpm-mono/api run dev",
+    "dev:web":"pnpm --filter @pnpm-mono/web run dev"
+    
+
   },
   "keywords": [],
   "author": "",
