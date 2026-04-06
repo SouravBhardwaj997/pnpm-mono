@@ -1,7 +1,8 @@
 import { TRPCError } from "@trpc/server";
+import z from "zod";
 import { prisma } from "@/lib/prisma";
 import { comparePassword, hashPassword, signJWT } from "@/utils";
-import { publicProcedure, router } from "../../trpc";
+import { protectedProcedure, publicProcedure, router } from "../../trpc";
 import { loginInputSchema, signUpInputSchema, signUpOutputSchema } from "./auth.schema";
 
 export const authRouter = router({
@@ -57,5 +58,8 @@ export const authRouter = router({
       user,
       token,
     };
+  }),
+  me: protectedProcedure.input(z.undefined()).query(async ({ ctx }) => {
+    return ctx.user;
   }),
 });
