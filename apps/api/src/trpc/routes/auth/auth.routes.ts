@@ -9,7 +9,7 @@ export const authRouter = router({
     const { email, name, password, username } = input;
     const existingEmail = await prisma.user.findFirst({ where: { email: email.toLowerCase() } });
     if (existingEmail) {
-      throw new TRPCError({ code: "CONFLICT", message: "Invalid Credential" });
+      throw new TRPCError({ code: "CONFLICT", message: "Email Already Exists" });
     }
     const existingUsername = await prisma.user.findFirst({ where: { username: username.toLowerCase() } });
     if (existingUsername) {
