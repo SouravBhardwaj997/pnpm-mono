@@ -8,8 +8,8 @@ export const signUpSchema = z.object({
 })
 
 export const loginSchema = z.object({
-    usernameOrEmail:z.string(),
-    password:z.string(),
+    usernameOrEmail:z.string().min(1,"Username or Email is Required"),
+    password:z.string().min(1,"password is required"),
 })
 
 export type SignUpSchemaType = z.infer<typeof signUpSchema> 

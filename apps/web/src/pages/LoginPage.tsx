@@ -1,34 +1,39 @@
-import * as React from "react";
 import { Button, Input } from "@pnpm-mono/ui";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight, TrendingUp, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ErrorText from "../components/ErrorText";
+import { useForm } from "react-hook-form";
+import type { LoginInSchemaType } from "../schema/signUpSchema";
+import { useState } from "react";
+import { useLogin } from "../hooks/useLogin";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [formData, setFormData] = React.useState({ usernameOrEmail: "", password: "" });
-  const [errors, setErrors] = React.useState<Record<string, string>>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
+  const {register , formState:{errors},handleSubmit,setError } = useForm<LoginInSchemaType>()
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors: Record<string, string> = {};
-    if (!formData.usernameOrEmail) newErrors.usernameOrEmail = "Email or username is required";
-    if (!formData.password) newErrors.password = "Password is required";
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
+  const [showPassword, setShowPassword] = useState(false);
+  
+  const {mutate,isPending} = useLogin({
+    onGlobalError:(err)=>{
+      toast.error(err)
+    },
+    onFieldErrors:(field,message)=>{
+      setError(field,{
+        message
+      })
+    },
+    onSuccess:()=>{
+      toast.success("User Logged In")
+      navigate("/dashboard")
     }
-    // TODO: integrate login mutation
-    navigate("/dashboard");
-  };
+  })
+
+  const onSubmit=(data:LoginInSchemaType)=>{
+   mutate(data)
+  }
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-8 bg-zinc-50 dark:bg-zinc-950 relative overflow-hidden">
@@ -48,37 +53,34 @@ export default function LoginPage() {
             <TrendingUp className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-50 tracking-tight text-center">
-            Welcome back 👋
+            Welcome back 
           </h2>
           <p className="mt-2 text-zinc-500 dark:text-zinc-400 font-medium text-center">
             Sign in to your account to continue
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className="relative">
             <Mail className="absolute left-4 top-[42px] w-4 h-4 text-zinc-400 z-10" />
             <Input
               label="Email or Username"
-              name="usernameOrEmail"
               placeholder="name@example.com"
               className="pl-11"
-              value={formData.usernameOrEmail}
-              onChange={handleChange}
+              {...register("usernameOrEmail")}
             />
-            {errors.usernameOrEmail && <ErrorText>{errors.usernameOrEmail}</ErrorText>}
+            {errors.usernameOrEmail && errors.usernameOrEmail.message &&<ErrorText>{errors.usernameOrEmail.message}</ErrorText>}
           </div>
 
           <div className="relative">
             <Lock className="absolute left-4 top-[42px] w-4 h-4 text-zinc-400 z-10" />
             <Input
               label="Password"
-              name="password"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               className="pl-11 pr-12"
-              value={formData.password}
-              onChange={handleChange}
+              {...register("password")}
+
             />
             <button
               type="button"
@@ -87,7 +89,7 @@ export default function LoginPage() {
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
-            {errors.password && <ErrorText>{errors.password}</ErrorText>}
+            {errors.password && errors.password.message && <ErrorText>{errors.password.message}</ErrorText>}
           </div>
 
           <div className="flex justify-end">
@@ -103,6 +105,7 @@ export default function LoginPage() {
             type="submit"
             variant="gradient"
             className="w-full h-14 rounded-2xl text-base font-bold shadow-xl shadow-fuchsia-600/20 group hover:opacity-90 mt-2"
+            isLoading={isPending}
           >
             Sign In
             <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />

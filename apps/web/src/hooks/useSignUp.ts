@@ -4,7 +4,7 @@ import type { SignUpSchemaType } from "../schema/signUpSchema";
 import { parseTRPCErrors } from "../utils/parseTRPCErrors";
 
 
-type User = {
+export type User = {
   username: string,
   name: string;
   email: string;

@@ -24,7 +24,7 @@ export default function SignUpPage() {
     trigger,
   } = useForm<SignUpSchemaType>({
     resolver: zodResolver(signUpSchema),
-    shouldUnregister: false, // Ensures field values aren't lost when unmounted
+    shouldUnregister: false,
   });
 
   const { mutate, isPending } = useSignUp({
@@ -65,8 +65,8 @@ export default function SignUpPage() {
     return score;
   }, [passwordValue]);
 
-  const strengthLabel = ["", "Weak", "Fair", "Good", "Strong"][passwordStrength];
-  const strengthColor = ["", "bg-red-400", "bg-amber-400", "bg-yellow-400", "bg-emerald-500"][passwordStrength];
+  const strengthLabel = ["Weak", "Weak", "Fair", "Good", "Strong"][passwordStrength];
+  const strengthColor = ["bg-red-400", "bg-red-400", "bg-amber-400", "bg-yellow-400", "bg-emerald-500"][passwordStrength];
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-8 bg-zinc-50 dark:bg-zinc-950 relative overflow-hidden">
