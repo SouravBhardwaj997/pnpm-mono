@@ -7,7 +7,7 @@ import { trpc } from "../utils/trpc";
 
 type UseLoginProps = {
     onSuccess?: ({ user, token }: {
-        user: User,
+        user: User, 
         token: string;
     }) => void,
     onFieldErrors?: (field: keyof LoginInSchemaType, message: string) => void,
