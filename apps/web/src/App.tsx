@@ -1,21 +1,20 @@
-import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from './utils/trpc';
-import AuthPage from './components/AuthPage';
-import { Toaster } from "react-hot-toast"
-function App() {
+import { Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import DashboardPage from "./pages/DashboardPage";
+import ExpensesPage from "./pages/ExpensesPage";
+import IncomePage from "./pages/IncomePage";
+
+export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthPage />
-      <Toaster
-        toastOptions={{
-          style: {
-            background: '#333',
-            color: '#fff',
-          },
-        }}
-      />
-    </QueryClientProvider>
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/expenses" element={<ExpensesPage />} />
+      <Route path="/income" element={<IncomePage />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes> 
   );
 }
-
-export default App

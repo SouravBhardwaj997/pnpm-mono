@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useSignUp } from "../hooks/useSignUp";
 import { useForm } from "react-hook-form";
-import { signUpSchema, type SignUpSchemaType } from "../schema/signUpSchema";
+import { loginSchema, signUpSchema, type LoginInSchemaType, type SignUpSchemaType } from "../schema/signUpSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorText from "./ErrorText";
 import toast from "react-hot-toast";
@@ -19,6 +19,8 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = React.useState(true);
 
   const { register, handleSubmit, formState: { errors }, setError } = useForm<SignUpSchemaType>({ resolver: zodResolver(signUpSchema) })
+
+  const { register: loginRegisters, handleSubmit: handleLoginSubmit, formState: { errors: loginErrors }, setError: setLoginErrors } = useForm<LoginInSchemaType>({ resolver: zodResolver(loginSchema) })
 
   const { mutate, isPending } = useSignUp({
     onFieldErrors:(field, message) =>{
@@ -34,6 +36,8 @@ export default function AuthPage() {
     }
   })
 
+  // const 
+
   const onSubmit = (data: {
     username: string,
     name: string,
@@ -48,7 +52,7 @@ export default function AuthPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className=" grid grid-cols-1  gap-0 overflow-hidden rounded-[2.5rem] glass-card shadow-2xl"
+        className="grid grid-cols-1  gap-0 overflow-hidden rounded-[2.5rem] glass-card shadow-2xl"
       >
 
         {/* Content Side */}
@@ -185,15 +189,7 @@ export default function AuthPage() {
           </div>
         </div>
 
-        <div className="absolute bottom-6 left-0 right-0 text-center">
-          <Badge
-            variant="secondary"
-            outline
-            className="text-[10px] uppercase tracking-widest opacity-40"
-          >
-            © 2026 FinTrace Secure Auth
-          </Badge>
-        </div>
+        
       </motion.div>
     </div>
   );
