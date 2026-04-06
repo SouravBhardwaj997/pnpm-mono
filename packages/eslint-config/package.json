@@ -1,0 +1,18 @@
+{
+  "name": "@pnpm-mono/eslint-config",
+  "type": "module",
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.32.1",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "exports": {
+    ".": "./eslint.config.js",
+    "./createConfig": "./createConfig.js"
+  },
+  "main": "index.js",
+  "devDependencies": {
+    "@antfu/eslint-config": "^7.7.3"
+  }
+}

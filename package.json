@@ -3,8 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": "true",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "pnpm -r --parallel --if-present run dev",
+    "build": "pnpm -r --if-present run build",
+    "lint": "pnpm -r --if-present run lint",
+    "lint:fix": "pnpm -r --if-present run lint:fix",
+    "build:api":"pnpm --filter @pnpm-mono/api run build",
+    "dev:api":"pnpm --filter @pnpm-mono/api run dev",
+    "dev:web":"pnpm --filter @pnpm-mono/web run dev"
+    
+
   },
   "keywords": [],
   "author": "",

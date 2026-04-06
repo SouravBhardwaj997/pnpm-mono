@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User{
+  id Int  @id @default(autoincrement())
+  email String @unique
+  password String 
+  username String @unique
+  name String
+  createdAt DateTime @default(now())
+  expenses Expense[]
+  income Income[]
+}
+
+enum PaymentMethods {
+  CASH
+  CARD
+}
+model Expense{
+  id Int @id @default(autoincrement())
+  amount Int
+  note String
+  paymentMethod PaymentMethods  
+  date DateTime @default(now())
+  categoryId Int
+  category ExpenseCategory @relation(fields: [categoryId],references: [id]) 
+  userId Int
+  user User @relation(fields: [userId],references: [id])
+}
+
+model ExpenseCategory{
+  id Int @id @default(autoincrement())
+  title String @unique
+  description String
+  expenses Expense[]
+}
+
+enum IncomeMethods {
+  CASH
+  CARD
+}
+
+model Income {
+  id Int @id @default(autoincrement())
+  amount Int
+  note String?
+  incomeMethod IncomeMethods
+  date DateTime @default(now())
+  incomeCategoryId Int 
+  incomeCategory IncomeCategory @relation(fields: [incomeCategoryId],references: [id])
+  userId Int
+  user User @relation(fields: [userId],references: [id])
+}
+
+model IncomeCategory{
+  id Int @id @default(autoincrement())
+  title String @unique
+  description String
+  income Income[]
+}
