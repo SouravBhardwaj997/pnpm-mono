@@ -2,18 +2,18 @@ import { TRPCError } from "@trpc/server";
 import { prisma } from "@/lib/prisma";
 import { comparePassword, hashPassword, signJWT } from "@/utils";
 import { publicProcedure, router } from "../../trpc";
-import { loginInputSchema, signUpInputSchema } from "./auth.schema";
+import { loginInputSchema, signUpInputSchema, signUpOutputSchema } from "./auth.schema";
 
 export const authRouter = router({
-  signUp: publicProcedure.input(signUpInputSchema).mutation(async ({ input }) => {
+  signUp: publicProcedure.input(signUpInputSchema).output(signUpOutputSchema).mutation(async ({ input }) => {
     const { email, name, password, username } = input;
     const existingEmail = await prisma.user.findFirst({ where: { email: email.toLowerCase() } });
     if (existingEmail) {
-      throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid Credential" });
+      throw new TRPCError({ code: "CONFLICT", message: "Invalid Credential" });
     }
     const existingUsername = await prisma.user.findFirst({ where: { username: username.toLowerCase() } });
     if (existingUsername) {
-      throw new TRPCError({ code: "BAD_REQUEST", message: "Username Already Exists" });
+      throw new TRPCError({ code: "CONFLICT", message: "Username Already Exists" });
     }
     const hashedPassword = await hashPassword(password);
 

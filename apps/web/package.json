@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@pnpm-mono/ui": "workspace:*",
     "@tanstack/react-query": "^5.96.1",
     "@trpc/client": "^11.16.0",
@@ -18,7 +19,10 @@
     "lucide-react": "^0.473.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "tailwind-merge": "^3.5.0"
+    "react-hook-form": "^7.72.1",
+    "react-hot-toast": "^2.6.0",
+    "tailwind-merge": "^3.5.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint-react/eslint-plugin": "^4.2.3",
