@@ -1,12 +1,11 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './utils/trpc';
-import Test from './components/Test';
+import AuthPage from './components/AuthPage';
  
  function App() {
   return (
     <QueryClientProvider client={queryClient}>
-     
-      <Test/>
+      <AuthPage/>
     </QueryClientProvider>
   );
 }
